@@ -132,10 +132,10 @@
 			if(self::postHas('vendedores') && self::postHas('estado')):
 
 			
-				if(empty(self::getPost('vendedores'))):
+				if(empty($_POST['vendedores'])):
 					return $this->getAdmin();
 				else:
-					return $this->getAdminByVendedor(self::getPost('vendedores'),self::getPost('estado'));
+					return $this->getAdminByVendedor($_POST['vendedores'],$_POST['vendedores']);
 				endif;
 			endif;
 		}
