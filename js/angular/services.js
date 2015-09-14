@@ -39,7 +39,7 @@ app.service('ajax', ['$http','$rootScope',function (ajax,root) {
 			post: function(param,callback){
 				var extend = param;
 					extend.vendedor_estrella = "";
-				ajax.post('../ajax.php',extend).success(callback).error(function(a){
+				ajax.post('ajax.php',extend).success(callback).error(function(a){
 					console.error(a);
 				});
 			},
