@@ -1,6 +1,6 @@
 <?php
 	error_reporting(0);
-	require_once('../libs.php');
+	require_once('../../core_nufarm/libs.php');
 	require_once('../inc/header.php');
 	Auth::checkAdmin();
 

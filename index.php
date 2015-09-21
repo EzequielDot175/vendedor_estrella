@@ -1,5 +1,5 @@
 <?php 
-require_once('libs.php');
+require_once('../core_nufarm/libs.php');
 Auth::check();
 
 ?>
