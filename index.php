@@ -48,7 +48,7 @@ Auth::check();
 						<option>VENDEDOR ESTRELLA</option>
 					</select>
 					<div class="logout">
-						<p class="text-uppercase">salir</p>
+						<a href="logout.php"><p class="text-uppercase">salir</p></a>
 						<img src="assets/images/cerrar.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
 					</div>
 				</div>
