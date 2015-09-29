@@ -12,7 +12,6 @@
          url('../fonts/samuelstype_-_brooklynsamuelsfive-bold-webfont.svg#brooklyn_samuelsno5_bold') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
 
 @font-face {
@@ -67,6 +66,19 @@
 }
 
 @font-face {
+    font-family: 'Gotham-Book';
+    src: url('../fonts/Gotham-Book.eot');
+    src: url('../fonts/Gotham-Book.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Gotham-Book.woff') format('woff2'),
+         url('../fonts/Gotham-Book.woff') format('woff'),
+         url('../fonts/Gotham-Book.otf'),
+         url('../fonts/Gotham-Book.svg#Gotham-Book') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
     font-family: 'Gotham-Light';
     src: url('../fonts/Gotham-Light.eot');
     src: url('../fonts/Gotham-Light.eot?#iefix') format('embedded-opentype'),
@@ -89,6 +101,15 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Gotham-Bold';
+    src: url('../fonts/Gotham-Bold.eot');
+    src: local('☺'), url('../fonts/Gotham-Bold.woff') format('woff'), 
+            url('../fonts/Gotham-Bold.ttf') format('truetype'), 
+            url('../fonts/Gotham-Bold.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
@@ -139,6 +160,7 @@ $gris : #404040;
 $grisA : #CBCCC0;  
 $grisB : #B1B6A6;
 $error : #AA4025;
+$amarillo : #E5AC0E;
 
 .contenedor {
     width: 1200px;
@@ -173,21 +195,21 @@ $error : #AA4025;
                         top: 20px;
 
                         select{
-                                color: #fff;
-                                font-family: 'BrooklynSamuelsFive-Bold';
-                                background-color: $verde;
-                                border: none;
-                                box-shadow: none;
-                                background-image: url('../images/background-select2.png');
-                                background-size: 100% 80%;
-                                background-repeat: no-repeat;
-                                background-position-x: 0;
-                                background-position-y: bottom;
-                                direction: rtl;
-                                -webkit-appearance: none;
-                                -moz-appearance: none;
-                                appearance: none;
-                                padding-right:20px;
+	                        color: #fff;
+	                        font-family: 'BrooklynSamuelsFive-Bold';
+	                        background-color: $verde;
+	                        border: none;
+	                        box-shadow: none;
+	                        background-image: url('../images/background-select2.png');
+	                        background-size: 100% 80%;
+	                        background-repeat: no-repeat;
+	                        background-position-x: 0;
+	                        background-position-y: bottom;
+	                        direction: rtl;
+	                        -webkit-appearance: none;
+	                        -moz-appearance: none;
+	                        appearance: none;
+	                        padding-right:20px;
                         }
 
                         .option {
@@ -228,6 +250,24 @@ $error : #AA4025;
                          }
             }
 }
+
+.titulo-general{
+        width: 100%;
+        float: left;
+        background-color: rgba($amarillo, 0.8);
+      -moz-background-color: rgba($amarillo, 0.8);
+      -ms-background-color: rgba($amarillo, 0.8);
+      -o-background-color: rgba($amarillo, 0.8);
+      -webkit-background-color: rgba($amarillo, 0.8);
+
+      h3{
+        color: #fff;
+        font-size: 14px;
+        font-family: 'BrooklynSamuelsFive-Bold';
+        text-align: center;
+        padding: 10px;
+      }
+    }
 
 .centrado{
     margin: 0 auto;
