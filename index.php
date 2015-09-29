@@ -62,6 +62,9 @@
 							<div class="row">
 								<div class="col-xs-6">
 									<img src="assets/images/Nufarm-max-logo.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
+									<?php if($user->gold == 1): ?>
+									<img src="assets/images/green.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
+									<?php endif; ?>
 								</div>
 								<div class="col-xs-6 controls">
 									
