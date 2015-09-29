@@ -1,20 +1,36 @@
 <?php 
-require_once('../core_nufarm/libs.php');
-Auth::check();
+	@session_start();
+	require_once('../core_nufarm/libs.php');
 
-?>
+	$user = Auth::User();
+	$ve = new VendedorEstrella();
+	if(!$ve->hasFacturacion()):
+		$ve->initFactUser($user->idUsuario, $user->vendedor);
+	endif;
+
+	$facturacion = $ve->getFacturacionById();
+	$fact_data = json_decode($facturacion->data);
+	$lastPeriod = $ve->prevPeriod($user->idUsuario);
+
+	$fact_total_per = VendedorEstrella::calcFactTotal($facturacion->fact_total, $lastPeriod->total);
+	$fact_total_clave_per = VendedorEstrella::calcFactTotalClave($facturacion->fact_total, $facturacion->fact_prod_clave);
+
+	$cat_prize = $ve->getPrizeCategory($fact_total_per,$fact_total_clave_per);
+
+ ?>
+
+
+
+
 <!DOCTYPE html>
-<html lang="es" ng-app="ve">
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>Nufarm - Vendedor Estrella</title>
-	<meta name="auth" content="<?php echo Auth::id() ?>">
-	<meta name="auth-role" content="">
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>Nufarm - Vendedor Estrella</title>
 
-	<!-- librerías opcionales que activan el soporte de HTML5 para IE8 -->
+		<!-- librerías opcionales que activan el soporte de HTML5 para IE8 -->
 		<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -26,257 +42,350 @@ Auth::check();
 
 		<!-- CSS de font-awesome-4.3.0 para iconos sociales-->
 		<link href="assets/fonts/font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet" media="screen">
-
+		
+		<!-- Librería jS -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="assets/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		<script src="assets/js/eventos.js"></script>
+		<script src="assets/js/jquery.canvasjs.min.js"></script>
+		
 		<!-- CSS -->
 		<link href="assets/css/estilos.css?v=01" rel="stylesheet" media="screen">
-		
-		<!-- GRAFICOS -->
-		<script src="assets/js/Chart.js"></script>
 	</head>
-
-
 	<body>
+		<div class="container-fluid">
+			<section id="header">
+				<div class="row">
+					<div class="col-xs-12 header">
+						<div class="inner">
+							<div class="row">
+								<div class="col-xs-6">
+									<img src="assets/images/Nufarm-max-logo.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
+								</div>
+								<div class="col-xs-6 controls">
+									
+									<div class="dropdown">
+										
+										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+											<li><a href="#">Action</a></li>
+											<li><a href="#">Another action</a></li>
+											<li><a href="#">Something else here</a></li>
+											<li><a href="#">Separated link</a></li>
+										</ul>
+									</div>
+									<div class="logout">
+										<p class="text-uppercase">salir</p>
+										<img src="assets/images/cerrar.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
+									</div>
 
-		<div class="head">
-			<div class="contenedor">
-				<img src="assets/images/Nufarm-max-logo.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
-				<div class="block">
-					<img class="icon-select " src="assets/images/flecha-select.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
-					<select class="form-control">
-						<option>MARKETING NET</option>
-						<option>PLAN DE NEGOCIOS</option>
-						<option>VENDEDOR ESTRELLA</option>
-					</select>
-					<div class="logout">
-						<a href="logout.php"><p class="text-uppercase">salir</p></a>
-						<img src="assets/images/cerrar.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
+			</section><!-- end #header -->
+
+			<section id="content">
+				<div class="row">
+					<div class="inner">
+						<div class="col-xs-12">
+							<div class="row">
+								<div class="filters">
+									<div class="col-xs-6">
+										<p>
+											facturación
+										</p>
+									</div>
+									<div class="col-xs-6">
+										<select name="">   
+					                		<option value="">FACTURACION <?php echo VendedorEstrella::formatCurrentPeriod($facturacion->periodo_inicial, $facturacion->periodo_final ); ?></option>
+							           	</select>
+									</div>
+								</div><!-- end .filters -->
+							</div>
+
+							<div class="data">
+								<div class="col-xs-12">
+									<div class="row">
+										<h3>
+											<?php echo $user->strEmpresa ?>
+										</h3>
+										<section class="boxes">
+											<div class="col-xs-6 col-sm-3"> 
+												<div class="box">
+													<div class="top">
+														<p>
+															<?php echo $lastPeriod->total ?>
+														</p>
+													</div>
+													<div class="bot">
+														<span>
+															Facturación Total Período anterior
+														</span>
+													</div>
+
+												</div>
+											</div>
+											<div class="col-xs-6 col-sm-3"> 
+												<div class="box">
+													<div class="top">
+														<p>
+															<?php echo $fact_total_per ?>%
+															<br>
+															<span>
+																<?php echo $facturacion->fact_total ?>
+															</span>
+														</p>
+													</div>
+													<div class="bot">
+														<span>
+															Avance Facturación Total en relación al Período anterior
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="col-xs-6 col-sm-3"> 
+												<div class="box"> 
+													<div class="top">
+														<p>
+															<?php echo $fact_total_clave_per ?>%
+															<br>
+															<span>
+																<?php echo $facturacion->fact_prod_clave ?>
+															</span>
+														</p>
+													</div>	
+													<div class="bot">
+														<span>
+															Facturación Productos Clave
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="col-xs-6 col-sm-3">
+												<div class="box">
+													<div class="top">
+														<p>
+															<?php echo $cat_prize ?>
+														</p>
+													</div>
+													<div class="bot">
+														<span>
+															Al momento accede
+															<br>
+															a categoría
+														</span>
+													</div>
+												</div>	
+											</div>
+										</section><!-- end .boxes -->
+
+										<section class="tables">
+											<h4>
+												avance mensual
+											</h4>
+											<div class="row">
+												<div class="col-xs-12">
+													<table width="100%" border="0" cellspacing="0" cellpadding="0">
+														<tr class="yrs">
+															<td width="8%" align="left" valign="middle">&nbsp;</td>
+															<td colspan="5" align="left" valign="middle"><p>2015</p></td>
+															<td colspan="3" align="left" valign="middle"><p>2016</p></td>
+														</tr>
+														<tr class="mons">
+															<td align="left" valign="middle">&nbsp;</td>
+															<?php foreach($fact_data as $k => $v): ?>
+															<td width="8.5%" align="left" valign="middle"><p><?php echo $k; ?></p></td>
+															<?php endforeach; ?>
+															<td width="8.5%" align="left" valign="middle"><p>Mayo</p></td>
+															<td width="8.5%" align="left" valign="middle"><p>Junio</p></td>
+															<td width="8.5%" align="left" valign="middle"><p>Julio</p></td>
+															
+														</tr>
+														<tr>
+															<td align="center" valign="middle" class="key"><p>p. total</p></td>
+															<?php foreach($fact_data as $k => $v): ?>
+															<td align="center" valign="middle" class="input"><p><?php echo $v->facturacion_total ?></p></td>
+															<?php endforeach; ?>
+															<td align="center" valign="middle" class="input"><p>0</p></td>
+															<td align="center" valign="middle" class="input"><p>0</p></td>
+															<td align="center" valign="middle" class="input"><p>0</p></td>
+														</tr>
+														<tr>
+															<td align="center" valign="middle" class="key"><p>p. clave</p></td>
+															<?php foreach($fact_data as $k => $v): ?>
+															<td align="center" valign="middle" class="input"><p><?php echo $v->facturacion_prod_clave ?></p></td>
+															<?php endforeach; ?>
+															<td align="center" valign="middle" class="input"><p>0</p></td>
+															<td align="center" valign="middle" class="input"><p>0</p></td>
+															<td align="center" valign="middle" class="input"><p>0</p></td>
+														</tr>
+													</table>
+												</div>
+											</div>
+										</section><!-- end tables -->
+
+										<section class="prog-bar">
+											<h4>
+												premio
+											</h4>
+											<div class="row">
+												<div class="col-xs-12">
+													<div class="row">
+														<div class="col-xs-3 prog-position">
+															<div>
+																<p>
+																	0
+																</p>
+															</div>
+														</div>
+													<?php /*if($cat_prize == 1): ?>
+														<div class="col-xs-3 prog-position" id="position-1">
+															<div class="icon">
+																<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In  -->
+																<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" viewBox="0 0 104 104" xml:space="preserve">
+																<style type="text/css">
+																	.st0{opacity:0.6;}
+																	.st1{opacity:0.3;fill:none;stroke:#666666;stroke-miterlimit:10;}
+																</style>
+																<defs>
+																</defs>
+																<g>
+																	<g class="st0">
+																		<g>
+																			<g>
+																				<path d="M68,21.5H16.5c-0.3,0-0.6,0.2-0.6,0.5v29.9c0,0.3,0.3,0.5,0.6,0.5h19.9h0.6h0.6l-0.2,2.8H47l-0.2-2.8h0.6h0.6H68
+																					c0.3,0,0.6-0.2,0.6-0.5V22C68.6,21.7,68.3,21.5,68,21.5z M66.1,49.5c0,0.2-0.2,0.5-0.5,0.5H49h-0.6h-0.6H36.9h-0.6h-0.6H18.9
+																					c-0.3,0-0.5-0.2-0.5-0.5V24.1c0-0.2,0.2-0.5,0.5-0.5h46.7c0.3,0,0.5,0.2,0.5,0.5V49.5L66.1,49.5z"/>
+																				<path d="M49.7,57.5v-0.7c0-0.3-0.2-0.5-0.5-0.5h-0.8h-0.6h-0.6h-9.6h-0.6h-0.6h-0.8c-0.3,0-0.5,0.2-0.5,0.5v0.7
+																					c0,0.3,0.2,0.5,0.5,0.5h0.7h12.4h0.7C49.4,58.1,49.7,57.8,49.7,57.5z"/>
+																			</g>
+																		</g>
+																	</g>
+																	<g class="st0">
+																		<path d="M92,78.7h-2.3c0.2-0.3,0.3-0.6,0.3-1V57.5c0-1-0.8-1.7-1.7-1.7H56.3c-1,0-1.7,0.8-1.7,1.7v20.2c0,0.4,0.1,0.7,0.3,1h-2.4
+																			c0,0-0.1,0.1,0.2,0.4c0.8,0.8,2.6,1.1,2.6,1.1l33.5,0c0,0,2.2,0,3-1.1C92.2,78.7,92,78.7,92,78.7z M74.5,79.1H70v-0.3h4.5V79.1
+																			L74.5,79.1z M88.7,77.3H56.8V57.9h30.9v19.4H88.7z"/>
+																	</g>
+																</g>
+																<circle class="st1" cx="52" cy="52" r="51.5"/>
+																</svg>
+															</div>
+															<p>
+																1
+															</p>
+														</div>
+													<?php elseif($cat_prize == 2): ?>
+														<div class="col-xs-3 prog-position" id="position-2">
+															<div class="icon">
+																<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In  -->
+																<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" viewBox="0 0 104 104" xml:space="preserve">
+																<style type="text/css">
+																	.st0{opacity:0.6;}
+																	.st1{opacity:0.3;fill:none;stroke:#666666;stroke-miterlimit:10;}
+																</style>
+																<defs>
+																</defs>
+																<g>
+																	<g class="st0">
+																		<g>
+																			<g>
+																				<path d="M68,21.5H16.5c-0.3,0-0.6,0.2-0.6,0.5v29.9c0,0.3,0.3,0.5,0.6,0.5h19.9h0.6h0.6l-0.2,2.8H47l-0.2-2.8h0.6h0.6H68
+																					c0.3,0,0.6-0.2,0.6-0.5V22C68.6,21.7,68.3,21.5,68,21.5z M66.1,49.5c0,0.2-0.2,0.5-0.5,0.5H49h-0.6h-0.6H36.9h-0.6h-0.6H18.9
+																					c-0.3,0-0.5-0.2-0.5-0.5V24.1c0-0.2,0.2-0.5,0.5-0.5h46.7c0.3,0,0.5,0.2,0.5,0.5V49.5L66.1,49.5z"/>
+																				<path d="M49.7,57.5v-0.7c0-0.3-0.2-0.5-0.5-0.5h-0.8h-0.6h-0.6h-9.6h-0.6h-0.6h-0.8c-0.3,0-0.5,0.2-0.5,0.5v0.7
+																					c0,0.3,0.2,0.5,0.5,0.5h0.7h12.4h0.7C49.4,58.1,49.7,57.8,49.7,57.5z"/>
+																			</g>
+																		</g>
+																	</g>
+																	<g class="st0">
+																		<path d="M92,78.7h-2.3c0.2-0.3,0.3-0.6,0.3-1V57.5c0-1-0.8-1.7-1.7-1.7H56.3c-1,0-1.7,0.8-1.7,1.7v20.2c0,0.4,0.1,0.7,0.3,1h-2.4
+																			c0,0-0.1,0.1,0.2,0.4c0.8,0.8,2.6,1.1,2.6,1.1l33.5,0c0,0,2.2,0,3-1.1C92.2,78.7,92,78.7,92,78.7z M74.5,79.1H70v-0.3h4.5V79.1
+																			L74.5,79.1z M88.7,77.3H56.8V57.9h30.9v19.4H88.7z"/>
+																	</g>
+																</g>
+																<circle class="st1" cx="52" cy="52" r="51.5"/>
+																</svg>
+															</div>
+															<p>
+																2
+															</p>
+														</div>
+													<?php elseif($cat_prize == 3): ?>
+														<div class="col-xs-3 prog-position" id="position-3">
+															<div class="icon">
+																<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In  -->
+																<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" viewBox="0 0 104 104" xml:space="preserve">
+																<style type="text/css">
+																	.st0{opacity:0.6;}
+																	.st1{opacity:0.3;fill:none;stroke:#666666;stroke-miterlimit:10;}
+																</style>
+																<defs>
+																</defs>
+																<g>
+																	<g class="st0">
+																		<g>
+																			<g>
+																				<path d="M68,21.5H16.5c-0.3,0-0.6,0.2-0.6,0.5v29.9c0,0.3,0.3,0.5,0.6,0.5h19.9h0.6h0.6l-0.2,2.8H47l-0.2-2.8h0.6h0.6H68
+																					c0.3,0,0.6-0.2,0.6-0.5V22C68.6,21.7,68.3,21.5,68,21.5z M66.1,49.5c0,0.2-0.2,0.5-0.5,0.5H49h-0.6h-0.6H36.9h-0.6h-0.6H18.9
+																					c-0.3,0-0.5-0.2-0.5-0.5V24.1c0-0.2,0.2-0.5,0.5-0.5h46.7c0.3,0,0.5,0.2,0.5,0.5V49.5L66.1,49.5z"/>
+																				<path d="M49.7,57.5v-0.7c0-0.3-0.2-0.5-0.5-0.5h-0.8h-0.6h-0.6h-9.6h-0.6h-0.6h-0.8c-0.3,0-0.5,0.2-0.5,0.5v0.7
+																					c0,0.3,0.2,0.5,0.5,0.5h0.7h12.4h0.7C49.4,58.1,49.7,57.8,49.7,57.5z"/>
+																			</g>
+																		</g>
+																	</g>
+																	<g class="st0">
+																		<path d="M92,78.7h-2.3c0.2-0.3,0.3-0.6,0.3-1V57.5c0-1-0.8-1.7-1.7-1.7H56.3c-1,0-1.7,0.8-1.7,1.7v20.2c0,0.4,0.1,0.7,0.3,1h-2.4
+																			c0,0-0.1,0.1,0.2,0.4c0.8,0.8,2.6,1.1,2.6,1.1l33.5,0c0,0,2.2,0,3-1.1C92.2,78.7,92,78.7,92,78.7z M74.5,79.1H70v-0.3h4.5V79.1
+																			L74.5,79.1z M88.7,77.3H56.8V57.9h30.9v19.4H88.7z"/>
+																	</g>
+																</g>
+																<circle class="st1" cx="52" cy="52" r="51.5"/>
+																</svg>
+															</div>
+															<p>
+																3
+															</p>
+														</div>
+													<?php endif;*/ ?>
+													</div><!-- end progress positions -->
+													<div class="progress">
+													  	<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo VendedorEstrella::widthBar($cat_prize) ?>%" id="graph">
+													  		<img src="assets/images/progresbg.png" class="img-responsive">
+												    		<span class="sr-only"><?php echo VendedorEstrella::widthBar($cat_prize) ?>% Complete</span>
+													  	</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-12 indicator">
+															<p>
+																estos son tus resultados
+																<br> 
+																al día de hoy, 
+																<br>
+																sigamos trabajando juntos 
+																<br>
+																para acceder 
+																<br>
+																a los máximos premios.
+															</p>
+														</div>
+													</div>
+												</div>
+											</div>
+										</section><!-- end .prog-bar -->
+									</div>
+								</div>
+							</div><!-- end .data -->
+						</div>
+					</div><!-- end .inner -->
+				</div>
+			</section><!-- end #content -->
 		</div>
 
-
-		<!-- CONTENEDOR GENERAL***********************************************************-->
-		<div class="contenedor " ng-controller="ctrlClient">
-
-			<!--base-->
-			<div class="base">
-
-				<!-- head -->
-				<div class=" head-cliente col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-					<h3 class="titulo-A">FACTURACIÓN</h3>
-					<select name="" ng-model="periodo" ng-change="selectPeriodo()">   
-						<option value="">FACTURACION</option>
-						<option value="{{value.inicio}}_{{value.fin}}" ng-repeat="(key, value) in periodos">{{value.inicio | date:'yyyy'}} / {{value.fin | date:'yyyy'}}</option>  
-					</select>  
-				</div>
-				<!-- end / head -->
-
-				<!--contenido-->
-				<div class="contenido col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-
-					
-
-					<!--Cliente -->
-					<div class="admin col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-
-						
-
-						<!-- contenedor B -->
-						<div class="contenedor-B col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-							
-							<h3 class="titulo-B text-uppercase"><?php echo Auth::User()->strEmpresa ?></h3> 
-
-							<div class="block-resumen-A">
-								<div class="block-resumen col-xs-12 col-sm-3 col-md-3 ol-lg-3">
-								<div class="num">{{total}}</div>
-									<hr class="hr-resumen"> 
-									<div class="text">
-										Facturación total
-									</div>
-								</div>
-
-								<div class="block-resumen col-xs-12 col-sm-3 col-md-3 ol-lg-3">
-									<div class="num">{{procentaje_prod_clave}}%</div>
-									<hr class="hr-resumen"> 
-									<div class="text">
-										Facturación Productos Clave
-									</div>
-								</div>
-
-								<div class="block-resumen col-xs-12 col-sm-3 col-md-3 ol-lg-3">
-									<div class="num">{{progreso}}%</div>
-									<hr class="hr-resumen"> 
-									<div class="text">
-										Avance Total Productos
-									</div>
-								</div>
-
-								<div class="block-resumen col-xs-12 col-sm-3 col-md-3 ol-lg-3">
-									<div class="num">{{ categoria }}</div>
-									<hr class="hr-resumen"> 
-									<div class="text">
-										Accede a categoría
-									</div>
-								</div>
-							</div>
-
-							<hr class="hr-cliente">
-
-							<!-- categoria -->
-							<div class="categorias col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-								<div class="item col-xs-3 col-sm-3 col-md-3 ol-lg-3">
-									<p class="num">0</p>
-								</div>
-								<div class="item col-xs-3 col-sm-3 col-md-3 ol-lg-3">
-									<img class="imagen" src="assets/images/premio.png" alt="">
-									<p class="num">1</p>
-								</div>
-								<div class="item col-xs-3 col-sm-3 col-md-3 ol-lg-3">
-									<img class="imagen"  src="assets/images/premio.png" alt="">
-									<p class="num activo">2</p>
-								</div>
-								<div class="item col-xs-3 col-sm-3 col-md-3 ol-lg-3">
-									<img class="imagen"  src="assets/images/premio.png" alt="">
-									<p class="num">3</p>
-								</div>
-							</div>
-							<!-- end / categoria -->
-
-
-
-							<!-- seleccionar -->
-							<div class="datos">
-
-								<div class="progressbar col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-									<div class="progress">
-										<div class="progress-bar" role="progressbar" aria-valuenow="70"
-										aria-valuemin="0" aria-valuemax="100" style="width:70%">
-										<span class="sr-only">70% Complete</span>
-									</div>
-								</div>
-							</div>
-
-							<div class="seleccionar col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-								<p class="text text-uppercase">SELECCIONAR PREMIO CATEGORÍA 2</p>
-								<select name="">   
-									<option value="">TABLET</option>   
-									<option value="">TV LED</option>   
-								</select>  
-
-								<img class="ok-seleccion" src="assets/images/ok.png" alt="">
-							</div>
-
-
-						</div>
-						<!-- end / seleccionar -->
-
-
-						<!-- meses -->
-						<div class="inputs col-xs-12 col-sm-12 col-md-12 ol-lg-12" ng-show="hasMonths" ng-hide="!hasMonths">
-
-							<div class="titulo-meses col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-								<h3 class="item item-a">2014</h3>
-								<h3 class="item item-b">2015</h3>
-							</div>
-
-							<!-- Tabla -->
-							<table class="tabla-A tabla-mes" >
-								<thead>
-									<tr>
-										<th class="text-uppercase col-mes">Agosto</th>
-										<th class="text-uppercase col-mes">Septiembre</th>
-										<th class="text-uppercase col-mes">Octubre</th>
-										<th class="text-uppercase col-mes">Noviembre</th>
-										<th class="text-uppercase col-mes">Diciembre</th>
-										<th class="text-uppercase col-mes">Enero</th>
-										<th class="text-uppercase col-mes">Febrero</th>
-										<th class="text-uppercase col-mes">Marzo</th>
-									</tr>
-								</thead>
-								<tbody>
-
-									<!-- item-->
-									<tr>
-										<td class=" background-A text-uppercase center">
-											{{ meses.Agosto }}
-										</td>
-										<td class="background-A text-uppercase  col-mes center ">
-											{{ meses.Septiembre }}
-										</td>
-										<td class="background-A text-uppercase  col-mes center">
-											{{ meses.Octubre }}
-										</td>
-										<td class="background-B text-uppercase  col-mes  center">
-											{{ meses.Noviembre }}
-										</td>
-										<td class="background-B text-uppercase  col-mes  center ">
-											{{ meses.Diciembre }}
-										</td>
-										<td class="background-A text-uppercase  col-mes  center ">
-											{{ meses.Enero }}
-										</td>
-										<td class="background-A text-uppercase  col-mes  center" >
-											{{ meses.Febrero }}
-										</td>
-										<td class="background-A text-uppercase  col-mes  center">
-											{{ meses.Marzo }}
-										</td>
-
-									</tr>
-									<!-- end / item-->
-
-								</tbody>
-							</table>
-							<!-- end / Tabla -->
-						</div>
-						<!-- end / meses -->
-
-						<!-- Gráfico -->
-						<div class="grafico col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-							<canvas id="canvas" height="125" width="600"></canvas>
-						</div>
-						<!-- end / Gráfico -->
-
-
-
-								</div>
-								<!-- end / contenedor B -->
-
-
-							</div>
-							<!-- end / Cliente -->
-
-							<!--footer-->
-							<div class="sub-footer col-xs-12 col-sm-12 col-md-12 ol-lg-12">
-
-							</div>
-							<!--end / footer-->
-
-
-						</div>
-						<!--end / contenido-->
-
-					</div>
-					<!--end / base-->
-
-				</div>
-				<!-- // CONTENEDOR GENERAL*********************************************-->
-
-				<div class="footer" style="position: relative;">
-					<img src="assets/images/Nufarm-max-logo-verde.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
-				</div>
-
-
-				<!-- Librería jS -->
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-				<script src="assets/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-				<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-				<script src="assets/js/eventos.js"></script>
-				<script src="js/angular/angular.min.js"></script>
-				<script src="js/angular/app.js"></script>
-				<script src="js/angular/services.js"></script>
-				<script src="js/angular/controllers/ctrlClient.js"></script>
-
-			</body>
-			</html>
+		<div class="footer" style="position: relative;">
+            <img src="assets/images/Nufarm-max-logo-verde.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
+         </div>
+		
+	</body>
+</html>
