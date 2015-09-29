@@ -27,7 +27,6 @@
 		<link href="../assets/css/estilos.css?v=01" rel="stylesheet" media="screen">
 		
 		<!-- GRAFICOS -->
-		<script src="../assets/js/Chart.js"></script>
 
 	</head>
  

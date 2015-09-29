@@ -146,35 +146,36 @@ app.controller('ctrlClient', ['$scope','ajax','$rootScope', function(scp, ajax, 
 
 	scp.graph = function(array){
 
-		if (window.myLine != undefined) {
-			window.myLine.destroy();
-		};
-		var labels = [];
-		for (var i = 0; i < array.length; i++) {
-			labels.push("");
-		};
+		// if (window.myLine != undefined) {
+		// 	window.myLine.destroy();
+		// };
+		// var labels = [];
+		// for (var i = 0; i < array.length; i++) {
+		// 	labels.push("");
+		// };
 
-		var lineChartData = {
-			//labels : ["Agosto","Septiembre","Octubre","Noviembre","Diciembre","Enero","Febrero","Marzo"], con labels
-			labels : labels, // sin labels
-			datasets : [
-			{
-				fillColor : "rgba(0,0,0,0.1)",
-				strokeColor : "rgba(220,220,220,1)",
-				pointColor : "#666666",
-				pointStrokeColor : "#666666",
-				pointHighlightFill : "#666666",
-				pointHighlightStroke : "rgba(220,220,220,1)",
-				data : array //valor correspondiente a la categoria de 0 a 3 por mes
-			},
-			]
+		// var lineChartData = {
+		// 	//labels : ["Agosto","Septiembre","Octubre","Noviembre","Diciembre","Enero","Febrero","Marzo"], con labels
+		// 	labels : labels, // sin labels
+		// 	datasets : [
+		// 	{
+		// 		fillColor : "rgba(0,0,0,0.1)",
+		// 		strokeColor : "rgba(220,220,220,1)",
+		// 		pointColor : "#666666",
+		// 		pointStrokeColor : "#666666",
+		// 		pointHighlightFill : "#666666",
+		// 		pointHighlightStroke : "rgba(220,220,220,1)",
+		// 		data : array //valor correspondiente a la categoria de 0 a 3 por mes
+		// 	},
+		// 	]
 
-		}
+		// }
 
-		var ctx = document.getElementById("canvas").getContext("2d");
-		window.myLine = new Chart(ctx).Line(lineChartData, {
-			responsive: true
-		});
+		// var ctx = document.getElementById("canvas").getContext("2d");
+		// window.myLine = new Chart(ctx).Line(lineChartData, {
+		// 	responsive: true
+		// });
+		
 	}
 	
 

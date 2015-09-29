@@ -2,7 +2,11 @@
 	error_reporting(0);
 	require_once('../../core_nufarm/libs.php');
 	require_once('../inc/header.php');
+	
+	Auth::sForceAuthAdmin(20);
+
 	Auth::checkAdmin();
+
 
 	$vendedor = new VendedorEstrella();
 
@@ -113,29 +117,29 @@
 										P.Total
 									</td>
 
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.agosto.total">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.agosto.disabled , 'background-B' : meses.agosto.disabled}">
+										<input type="text"  value="" ng-model="meses.agosto.total" ng-disabled="meses.agosto.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.septiembre.total">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.septiembre.disabled , 'background-B' : meses.septiembre.disabled}">
+										<input type="text"  value="" ng-model="meses.septiembre.total" ng-disabled="meses.septiembre.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.octubre.total">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.octubre.disabled , 'background-B' : meses.octubre.disabled}">
+										<input type="text"  value="" ng-model="meses.octubre.total" ng-disabled="meses.octubre.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.noviembre.total">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.noviembre.disabled , 'background-B' : meses.noviembre.disabled}">
+										<input type="text"  value="" ng-model="meses.noviembre.total" ng-disabled="meses.noviembre.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.diciembre.total">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.diciembre.disabled , 'background-B' : meses.diciembre.disabled}">
+										<input type="text"  value="" ng-model="meses.diciembre.total" ng-disabled="meses.diciembre.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.enero.total">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.enero.disabled , 'background-B' : meses.enero.disabled}">
+										<input type="text"  value="" ng-model="meses.enero.total" ng-disabled="meses.enero.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.febrero.total">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.febrero.disabled , 'background-B' : meses.febrero.disabled}">
+										<input type="text"  value="" ng-model="meses.febrero.total" ng-disabled="meses.febrero.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.marzo.total">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.marzo.disabled , 'background-B' : meses.marzo.disabled}">
+										<input type="text"  value="" ng-model="meses.marzo.total" ng-disabled="meses.marzo.disabled">
 									</td>
 
 
@@ -149,29 +153,29 @@
 									<td class="sin-borde">
 										P.Clave
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.agosto.total_prod_clave">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.agosto.disabled , 'background-B' : meses.agosto.disabled}">
+										<input type="text"  value="" ng-model="meses.agosto.total_prod_clave" ng-disabled="meses.agosto.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.septiembre.total_prod_clave">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.septiembre.disabled , 'background-B' : meses.septiembre.disabled}">
+										<input type="text"  value="" ng-model="meses.septiembre.total_prod_clave" ng-disabled="meses.septiembre.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.octubre.total_prod_clave">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.octubre.disabled , 'background-B' : meses.octubre.disabled}">
+										<input type="text"  value="" ng-model="meses.octubre.total_prod_clave" ng-disabled="meses.octubre.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.noviembre.total_prod_clave">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.noviembre.disabled , 'background-B' : meses.noviembre.disabled}">
+										<input type="text"  value="" ng-model="meses.noviembre.total_prod_clave" ng-disabled="meses.noviembre.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.diciembre.total_prod_clave">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.diciembre.disabled , 'background-B' : meses.diciembre.disabled}">
+										<input type="text"  value="" ng-model="meses.diciembre.total_prod_clave" ng-disabled="meses.diciembre.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.enero.total_prod_clave">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.enero.disabled , 'background-B' : meses.enero.disabled}">
+										<input type="text"  value="" ng-model="meses.enero.total_prod_clave" ng-disabled="meses.enero.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.febrero.total_prod_clave">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.febrero.disabled , 'background-B' : meses.febrero.disabled}">
+										<input type="text"  value="" ng-model="meses.febrero.total_prod_clave" ng-disabled="meses.febrero.disabled">
 									</td>
-									<td class=" background-A text-uppercase col-mes" >
-										<input type="text"  value="" ng-model="meses.marzo.total_prod_clave">
+									<td class=" background-A text-uppercase col-mes" ng-class="{'bcakground-A' :  !meses.marzo.disabled , 'background-B' : meses.marzo.disabled}">
+										<input type="text"  value="" ng-model="meses.marzo.total_prod_clave" ng-disabled="meses.marzo.disabled">
 									</td>
 									<td class="botones">
 										<!-- <button ng-click="updateFacturacion();"><img class="boton" src="../assets/images/editar.png" ></button> -->
@@ -187,10 +191,11 @@
 
 
 
-				<div >
+				<div>
+					
 					<!-- Gráfico -->
-					<div class="grafico col-xs-12 col-sm-12 col-md-12 ol-lg-12" >
-						<canvas id="canvas" height="125" width="600"></canvas>
+					<div class="chartContainer col-xs-12" style="height: 400px;" id="chartContainer">
+
 					</div>
 					<!-- end / Gráfico -->
 				</div>
