@@ -68,8 +68,10 @@
 
 								<div class="col-xs-6 controls">
 									<div class="logout">
-										<img src="assets/images/cerrar.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
+										<a href="logout.php">
+											<img src="assets/images/cerrar.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
 										<p class="text-uppercase">salir</p>
+										</a>
 									</div>
 
 									<div class="switcher">
