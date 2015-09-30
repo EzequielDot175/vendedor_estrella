@@ -476,13 +476,13 @@ li > a:focus {
 @font-face {
   font-family: 'Gotham-Medium';
   src: url("../fonts/Gotham-Medium.eot");
-  src: local("☺"), url("../fonts/Gotham-Medium.woff") format("woff"), url("../fonts/Gotham-Medium.ttf") format("truetype"), url("../fonts/Gotham-Medium.svg") format("svg");
+  src: local("Ôÿ║"), url("../fonts/Gotham-Medium.woff") format("woff"), url("../fonts/Gotham-Medium.ttf") format("truetype"), url("../fonts/Gotham-Medium.svg") format("svg");
   font-weight: normal;
   font-style: normal; }
 @font-face {
   font-family: 'Gotham-Bold';
   src: url("../fonts/Gotham-Bold.eot");
-  src: local("☺"), url("../fonts/Gotham-Bold.woff") format("woff"), url("../fonts/Gotham-Bold.ttf") format("truetype"), url("../fonts/Gotham-Bold.svg") format("svg");
+  src: local("Ôÿ║"), url("../fonts/Gotham-Bold.woff") format("woff"), url("../fonts/Gotham-Bold.ttf") format("truetype"), url("../fonts/Gotham-Bold.svg") format("svg");
   font-weight: normal;
   font-style: normal; }
 input[type=number]::-webkit-outer-spin-button,
@@ -1316,49 +1316,55 @@ p {
   background: -ms-linear-gradient(0deg, #009448 0%, rgba(0, 148, 72, 0.36) 19.63%, #009448 77.91%);
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#009448', endColorstr='#009448' ,GradientType=0)";
   background: linear-gradient(90deg, #009448 0%, rgba(0, 148, 72, 0.36) 19.63%, #009448 77.91%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#009448',endColorstr='#009448' , GradientType=1); }
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#009448',endColorstr='#009448' , GradientType=1);
+  padding: 20px 0;
+  margin-bottom: 20px; }
   #header .header .inner {
     max-width: 980px;
     width: 100%;
     margin: 0 auto; }
-    #header .header .inner .controls img {
-      margin: 0 auto;
-      display: block; }
-    #header .header .inner .controls select {
-      color: #fff;
-      font-family: 'BrooklynSamuelsFive-Bold';
-      background-color: #009448;
-      border: none;
-      box-shadow: none;
-      background-image: url("../images/background-select2.png");
-      background-size: 100% 80%;
-      background-repeat: no-repeat;
-      background-position-x: 0;
-      background-position-y: bottom;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      padding-right: 20px;
-      width: 120px; }
-    #header .header .inner .controls .option {
-      padding: 10px !important; }
-    #header .header .inner .controls .icon-select {
-      position: absolute;
-      right: 0;
-      top: 32px; }
+    #header .header .inner .controls .switcher {
+      float: right;
+      position: relative;
+      margin-top: 10px; }
+      #header .header .inner .controls .switcher select {
+        color: #fff;
+        font-family: 'BrooklynSamuelsFive-Bold';
+        background-color: rgba(0, 148, 72, 0.5);
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background-image: url("../images/background-select2.png");
+        background-size: 100% 80%;
+        background-repeat: no-repeat;
+        background-position-x: 0;
+        background-position-y: bottom;
+        direction: rtl;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        padding-right: 20px;
+        width: 200px; }
+      #header .header .inner .controls .switcher .option {
+        padding: 10px !important; }
+      #header .header .inner .controls .switcher .icon-select {
+        position: absolute;
+        right: 0;
+        top: 5px; }
     #header .header .inner .controls .logout {
       float: right;
       padding-top: 10px;
-      cursor: pointer; }
+      cursor: pointer;
+      width: 100%; }
       #header .header .inner .controls .logout p {
         color: #fff;
-        float: left;
+        float: right;
         font-family: 'BrooklynSamuelsFive-Bold';
         font-size: 11px;
         padding-top: 2px;
         padding-right: 5px; }
       #header .header .inner .controls .logout img {
-        float: left; }
+        float: right; }
       #header .header .inner .controls .logout:hover {
         opacity: .5; }
 

@@ -11,8 +11,7 @@
 	$facturacion = $ve->getFacturacionById();
 	$fact_data = json_decode($facturacion->data);
 	$lastPeriod = $ve->prevPeriod($user->idUsuario);
-
-	$fact_total_per = VendedorEstrella::calcFactTotal($facturacion->fact_total, $lastPeriod->total);
+	$fact_total_per = VendedorEstrella::calcFactTotal($facturacion->fact_total, ($lastPeriod ? $lastPeriod->total : 0) );
 	$fact_total_clave_per = VendedorEstrella::calcFactTotalClave($facturacion->fact_total, $facturacion->fact_prod_clave);
 
 	$cat_prize = $ve->getPrizeCategory($fact_total_per,$fact_total_clave_per);
@@ -66,20 +65,20 @@
 									<img src="assets/images/green.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
 									<?php endif; ?>
 								</div>
+
 								<div class="col-xs-6 controls">
-									
-									<div class="dropdown">
-										
-										<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-											<li><a href="#">Action</a></li>
-											<li><a href="#">Another action</a></li>
-											<li><a href="#">Something else here</a></li>
-											<li><a href="#">Separated link</a></li>
-										</ul>
-									</div>
 									<div class="logout">
-										<p class="text-uppercase">salir</p>
 										<img src="assets/images/cerrar.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
+										<p class="text-uppercase">salir</p>
+									</div>
+
+									<div class="switcher">
+							 			<img class="icon-select " src="assets/images/flecha-select.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
+						 				<select class="form-control" id="select-navigator">
+									  		<option value="/marketingNet">MARKETING NET</option>
+									  		<option value="/plan-de-negocios">PLAN DE NEGOCIOS</option>
+									  		<option selected="">VENDEDOR ESTRELLA</option>
+										</select>
 									</div>
 
 								</div>
@@ -119,7 +118,7 @@
 												<div class="box">
 													<div class="top">
 														<p>
-															<?php echo $lastPeriod->total ?>
+															<?php echo ( $lastPeriod ? $lastPeriod->total : 'NO DISPONIBLE' ) ?>
 														</p>
 													</div>
 													<div class="bot">
@@ -389,6 +388,14 @@
 		<div class="footer" style="position: relative;">
             <img src="assets/images/Nufarm-max-logo-verde.png" id="Nufarm" title="Nufarm" alt="Imagen no encontrada">
          </div>
-		
+		<script>
+		jQuery(document).ready(function($) {
+			$('#select-navigator').change(function(event) {
+				if ($(this).val() != "") {
+					window.location.href = $(this).val();
+				};
+			});
+		});
+		</script>
 	</body>
 </html>
